@@ -1,15 +1,16 @@
 import Image from "next/image";
+import Link from "next/link";
 import { FaStar, FaShoppingCart, FaRegEye, FaBolt } from "react-icons/fa";
-import { HiOutlineShoppingBag, HiOutlineshoppingBag } from "react-icons/hi2";
+import { HiOutlineShoppingBag } from "react-icons/hi2";
 
 const ProductCard = ({ product }) => {
   // 1. Destructure all properties for clean access
-  const { title, bangla, image, price, percentage, reviews, sold, ratings } =
+  const { _id, title, bangla, image, price, discount, reviews, sold, ratings } =
     product;
 
   // 2. Price Calculation Logic
-  const discountedPrice = Math.round(price - (price * (percentage ?? 0)) / 100);
-  console.log(discountedPrice);
+  const discountedPrice = Math.round(price - (price * (discount ?? 0)) / 100);
+  //   console.log(discountedPrice);
 
   return (
     <div className="group relative w-full  bg-white rounded-3xl border border-gray-100 shadow-sm hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-all duration-500 ease-out overflow-hidden flex flex-col">
@@ -29,19 +30,22 @@ const ProductCard = ({ product }) => {
 
         {/* Top Badges */}
         <div className="absolute top-4 left-4 right-4 flex justify-between items-start z-10">
-          {percentage > 0 && (
+          {discount > 0 && (
             <span className="badge border-none bg-red-500 text-white font-bold px-3 py-3 rounded-xl shadow-lg shadow-red-500/30">
-              -{percentage}%
+              -{discount}%
             </span>
           )}
         </div>
 
         {/* Floating Action Button (Appears on Hover) */}
         <div className="absolute bottom-4 left-0 right-0 flex justify-center translate-y-10 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 delay-75 z-20 px-4">
-          <button className="btn btn-sm glass text-gray-800 hover:text-primary w-full shadow-lg backdrop-blur-md">
+          <Link
+            href={`/products/${_id}`}
+            className="btn btn-sm glass text-gray-800 hover:text-primary w-full shadow-lg backdrop-blur-md"
+          >
             <FaRegEye className="text-lg" />
             Quick View
-          </button>
+          </Link>
         </div>
       </div>
 
@@ -76,7 +80,7 @@ const ProductCard = ({ product }) => {
           <span className="text-2xl font-extrabold text-gray-900">
             ৳{discountedPrice}
           </span>
-          {percentage > 0 && (
+          {discount > 0 && (
             <div className="flex flex-col leading-none">
               <span className="text-xs text-gray-400 line-through">
                 ৳ {price}

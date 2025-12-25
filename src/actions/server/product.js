@@ -9,8 +9,8 @@ export const getProducts = async () => {
 };
 
 export const getSingleProduct = async (id) => {
-  if (id.length != 24) {
-    return {};
+  if (!ObjectId.isValid(id)) {
+    return null;
   }
 
   const query = { _id: new ObjectId(id) };
