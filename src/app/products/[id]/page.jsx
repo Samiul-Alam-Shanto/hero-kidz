@@ -10,6 +10,59 @@ import {
 } from "react-icons/fa";
 import { HiOutlineShoppingBag, HiLightningBolt } from "react-icons/hi";
 
+export async function generateMetadata({ params }) {
+  const { id } = await params;
+  const product = await getSingleProduct(id);
+
+  if (!product) {
+    return {
+      title: "Product Not Found | Hero Kidz",
+      description: "The requested product could not be found.",
+    };
+  }
+
+  const { title, description, image, price = 0, discount = 0 } = product;
+
+  const discountedPrice = Math.round(price - (price * (discount ?? 0)) / 100);
+
+  const shortDescription =
+    description?.slice(0, 160) ||
+    "Discover fun and educational kids products at Hero Kidz.";
+
+  const productUrl = `https://hero-kidz-eta.vercel.app/products/${id}`;
+
+  return {
+    title: `${title} | Hero Kidz`,
+    description: shortDescription,
+
+    alternates: {
+      canonical: productUrl,
+    },
+
+    openGraph: {
+      type: "website",
+      url: productUrl,
+      title: `${title} | Hero Kidz`,
+      description: shortDescription,
+      images: [
+        {
+          url: image,
+          width: 1200,
+          height: 630,
+          alt: title,
+        },
+      ],
+    },
+
+    twitter: {
+      card: "summary_large_image",
+      title: `${title} | Hero Kidz`,
+      description: shortDescription,
+      images: [image],
+    },
+  };
+}
+
 const ProductDetails = async ({ params }) => {
   const { id } = await params;
   const product = await getSingleProduct(id);

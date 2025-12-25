@@ -50,7 +50,7 @@ const ProductCard = ({ product }) => {
       </div>
 
       {/* --- Content Section --- */}
-      <div className="flex flex-col flex-grow p-5 space-y-3">
+      <div className="flex flex-col grow p-5 space-y-3">
         {/* Rating & Sold Row */}
         <div className="flex items-center justify-between text-xs font-medium text-gray-500">
           <div className="flex items-center gap-1 bg-amber-50 px-2 py-1 rounded-lg text-amber-700">
