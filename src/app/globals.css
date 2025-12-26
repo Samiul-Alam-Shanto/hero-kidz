@@ -25,3 +25,21 @@
   --color-error: oklch(62% 0.24 28);
 }
 @custom-variant dark (&:where([data-theme=night], [data-theme=night] *));
+
+@keyframes mesh {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.mesh-gradient {
+  background: linear-gradient(-45deg, #d32e2e, #e65050, #ffffff, #f30000);
+  background-size: 400% 400%;
+  animation: mesh 15s ease infinite;
+}

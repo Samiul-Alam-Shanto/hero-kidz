@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { FaStar, FaShoppingCart, FaRegEye, FaBolt } from "react-icons/fa";
-import { HiOutlineShoppingBag } from "react-icons/hi2";
+import CartButton from "../buttons/CartButton";
 
 const ProductCard = ({ product }) => {
   // 1. Destructure all properties for clean access
@@ -20,7 +20,8 @@ const ProductCard = ({ product }) => {
         <Image
           src={image}
           alt={title}
-          fill
+          width={450}
+          height={280}
           className="object-cover transition-transform duration-700 ease-in-out group-hover:scale-110"
           sizes="(max-width: 768px) 100vw, 300px"
         />
@@ -95,12 +96,7 @@ const ProductCard = ({ product }) => {
 
       {/* --- Footer / Action Section --- */}
       <div className="p-5 pt-0 mt-auto">
-        <button className="btn btn-primary w-full rounded-xl text-white shadow-lg shadow-primary/30 hover:shadow-primary/50 transition-all duration-300 active:scale-95 flex items-center justify-center gap-2 group/btn">
-          <span className="text-xl group-hover/btn:-translate-x-1 transition-transform duration-300">
-            <HiOutlineShoppingBag />
-          </span>
-          Add to Cart
-        </button>
+        <CartButton product={{ ...product, _id: product._id.toString() }} />
       </div>
     </div>
   );

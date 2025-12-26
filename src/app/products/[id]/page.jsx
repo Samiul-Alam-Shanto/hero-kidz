@@ -1,5 +1,6 @@
 import { getSingleProduct } from "@/actions/server/product";
 import Error404 from "@/app/not-found";
+import CartButton from "@/components/buttons/CartButton";
 import Image from "next/image";
 import {
   FaStar,
@@ -209,10 +210,7 @@ const ProductDetails = async ({ params }) => {
 
           {/* Action Buttons */}
           <div className="flex gap-4 pt-4 sticky bottom-4 bg-white/80 backdrop-blur-md p-2 rounded-2xl border border-white lg:static lg:bg-transparent lg:p-0 lg:border-none">
-            <button className="btn btn-primary btn-lg flex-1 rounded-2xl shadow-xl shadow-primary/30 group">
-              <HiOutlineShoppingBag className="text-2xl group-hover:rotate-12 transition-transform" />
-              Add to Bag
-            </button>
+            <CartButton product={product} />
           </div>
 
           {/* Trust Badges */}
