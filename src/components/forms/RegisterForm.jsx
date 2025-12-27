@@ -11,21 +11,23 @@ import {
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { postUser } from "@/actions/server/auth";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 const RegisterForm = ({ onToggle }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
+  const params = useSearchParams();
+  const callBack = params.get("callbackUrl") || "/";
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = { name, email, password };
     const result = await postUser(formData);
     if (result.acknowledged) {
-      alert("Successful. Please LogIn.");
-      router.push("/login");
+      alert("Successful. Welcome");
+      router.push(callBack);
     }
     // Add your registration logic here (e.g., API call)
   };

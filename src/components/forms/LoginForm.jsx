@@ -11,6 +11,8 @@ import {
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { signIn } from "next-auth/react";
+import { redirect } from "next/dist/server/api-utils";
+import { useSearchParams } from "next/navigation";
 
 // Login Form Component
 const LoginForm = ({ onToggle }) => {
@@ -18,12 +20,34 @@ const LoginForm = ({ onToggle }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const formData = { email, password };
+  const params = useSearchParams();
+  const callBack = params.get("callbackUrl") || "/";
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     // console.log("Login submitted:", { email, password });
-    await signIn("credentials", { ...formData, redirect: false });
-    // Add your login logic here (e.g., API call)
+    const res = await signIn("credentials", {
+      ...formData,
+      // redirect: false,
+      callbackUrl: callBack,
+    });
+    if (!res.ok) {
+      alert("error, Email password not matched");
+    } else {
+      alert("success , Welcome to kidz Hub");
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    const result = await signIn("google", {
+      // redirect: false,
+      callbackUrl: callBack,
+    });
+    if (result.ok) {
+      alert("Welcome to HEROKIDZ");
+    } else {
+      alert("Something is Wrong");
+    }
   };
 
   return (
@@ -40,7 +64,10 @@ const LoginForm = ({ onToggle }) => {
         Glad to see you again!
       </p>
 
-      <button className="btn btn-ghost border-slate-200 bg-white hover:bg-slate-50 hover:border-slate-300 w-full rounded-2xl normal-case h-14 gap-3 shadow-sm transition-all duration-300">
+      <button
+        onClick={handleGoogleSignIn}
+        className="btn btn-ghost border-slate-200 bg-white hover:bg-slate-50 hover:border-slate-300 w-full rounded-2xl normal-case h-14 gap-3 shadow-sm transition-all duration-300"
+      >
         <FcGoogle className="text-2xl" />
         <span className="text-slate-700 font-semibold text-base">
           Continue with Google
