@@ -12,7 +12,7 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { redirect } from "next/dist/server/api-utils";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 // Login Form Component
 const LoginForm = ({ onToggle }) => {
@@ -22,19 +22,21 @@ const LoginForm = ({ onToggle }) => {
   const formData = { email, password };
   const params = useSearchParams();
   const callBack = params.get("callbackUrl") || "/";
+  const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     // console.log("Login submitted:", { email, password });
     const res = await signIn("credentials", {
       ...formData,
-      // redirect: false,
-      callbackUrl: callBack,
+      redirect: false,
+      // callbackUrl: callBack,
     });
     if (!res.ok) {
       alert("error, Email password not matched");
     } else {
       alert("success , Welcome to kidz Hub");
+      router.push(callBack);
     }
   };
 
