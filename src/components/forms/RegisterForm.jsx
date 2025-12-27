@@ -10,15 +10,23 @@ import {
 } from "react-icons/lu";
 import { motion } from "framer-motion";
 import { useState } from "react";
+import { postUser } from "@/actions/server/auth";
+import { useRouter } from "next/navigation";
 const RegisterForm = ({ onToggle }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const router = useRouter();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Register submitted:", { name, email, password });
+    const formData = { name, email, password };
+    const result = await postUser(formData);
+    if (result.acknowledged) {
+      alert("Successful. Please LogIn.");
+      router.push("/login");
+    }
     // Add your registration logic here (e.g., API call)
   };
 
@@ -35,17 +43,6 @@ const RegisterForm = ({ onToggle }) => {
       <p className="text-slate-500 font-medium text-center mb-8">
         Join 10k+ creators today.
       </p>
-
-      <button className="btn btn-ghost border-slate-200 bg-white hover:bg-slate-50 hover:border-slate-300 w-full rounded-2xl normal-case h-14 gap-3 shadow-sm transition-all duration-300">
-        <FcGoogle className="text-2xl" />
-        <span className="text-slate-700 font-semibold text-base">
-          Continue with Google
-        </span>
-      </button>
-
-      <div className="divider my-6 text-slate-400 text-xs font-bold uppercase tracking-widest">
-        or email
-      </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="relative group">

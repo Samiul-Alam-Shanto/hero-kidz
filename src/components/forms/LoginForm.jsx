@@ -10,16 +10,19 @@ import {
 } from "react-icons/lu";
 import { motion } from "framer-motion";
 import { useState } from "react";
+import { signIn } from "next-auth/react";
 
 // Login Form Component
 const LoginForm = ({ onToggle }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const formData = { email, password };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Login submitted:", { email, password });
+    // console.log("Login submitted:", { email, password });
+    await signIn("credentials", { ...formData, redirect: false });
     // Add your login logic here (e.g., API call)
   };
 
