@@ -2,14 +2,35 @@
 
 import Image from "next/image";
 import { Trash2 } from "lucide-react";
-import { deleteItemsFromCart } from "@/actions/server/cart";
+import {
+  decreaseItemDb,
+  deleteItemsFromCart,
+  increaseItemDb,
+} from "@/actions/server/cart";
 
-const CartCard = ({ item }) => {
+const CartCard = ({ item, removeItem, updateQuantity }) => {
   const { _id, title, image, price, quantity } = item;
 
   const handleRemove = (id) => {
     deleteItemsFromCart(id);
+
     alert("removed");
+    removeItem(id);
+  };
+  const onIncrease = async () => {
+    const result = await increaseItemDb(_id, quantity);
+    if (result.success) {
+      alert("quantity increased");
+      updateQuantity(_id, quantity + 1);
+    }
+  };
+
+  const onDecrease = async () => {
+    const result = await decreaseItemDb(_id, quantity);
+    if (result.success) {
+      alert("quantity decreased");
+      updateQuantity(_id, quantity - 1);
+    }
   };
 
   return (
@@ -27,9 +48,19 @@ const CartCard = ({ item }) => {
         <div className="flex items-center justify-between mt-4">
           {/* Quantity (UI only – backend later) */}
           <div className="flex items-center border rounded-lg overflow-hidden">
-            <button className="px-3 py-1 hover:bg-gray-100">−</button>
+            <button
+              onClick={onDecrease}
+              className="px-3 py-1 hover:bg-gray-100"
+            >
+              −
+            </button>
             <span className="px-4 text-sm">{quantity}</span>
-            <button className="px-3 py-1 hover:bg-gray-100">+</button>
+            <button
+              onClick={onIncrease}
+              className="px-3 py-1 hover:bg-gray-100"
+            >
+              +
+            </button>
           </div>
 
           {/* Remove */}

@@ -1,6 +1,7 @@
 "use server";
 
 import { authOptions } from "@/lib/authOptions";
+import { q } from "framer-motion/client";
 import { ObjectId } from "mongodb";
 import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
@@ -68,8 +69,45 @@ export const deleteItemsFromCart = async (id) => {
     _id: new ObjectId(id),
   };
   const result = await cartCollection.deleteOne(query);
-  if (Boolean(result.deletedCount)) {
-    revalidatePath("/cart");
-  }
+  // if (Boolean(result.deletedCount)) {
+  //   revalidatePath("/cart");
+  // }
   return { success: Boolean(result.deletedCount) };
+};
+
+export const decreaseItemDb = async (id, quantity) => {
+  const { user } = (await getServerSession(authOptions)) || {};
+  if (!user) return { success: false };
+
+  if (quantity <= 1) {
+    return { success: false };
+  }
+
+  const query = { _id: new ObjectId(id) };
+
+  const updatedData = {
+    $inc: {
+      quantity: -1,
+    },
+  };
+  const result = await cartCollection.updateOne(query, updatedData);
+  return { success: Boolean(result.modifiedCount) };
+};
+export const increaseItemDb = async (id, quantity) => {
+  const { user } = (await getServerSession(authOptions)) || {};
+  if (!user) return { success: false };
+
+  if (quantity > 10) {
+    return { success: false };
+  }
+
+  const query = { _id: new ObjectId(id) };
+
+  const updatedData = {
+    $inc: {
+      quantity: 1,
+    },
+  };
+  const result = await cartCollection.updateOne(query, updatedData);
+  return { success: Boolean(result.modifiedCount) };
 };
