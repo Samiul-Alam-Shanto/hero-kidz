@@ -75,6 +75,25 @@ export const deleteItemsFromCart = async (id) => {
   return { success: Boolean(result.deletedCount) };
 };
 
+export const increaseItemDb = async (id, quantity) => {
+  const { user } = (await getServerSession(authOptions)) || {};
+  if (!user) return { success: false };
+
+  if (quantity > 10) {
+    return { success: false };
+  }
+
+  const query = { _id: new ObjectId(id) };
+
+  const updatedData = {
+    $inc: {
+      quantity: 1,
+    },
+  };
+  const result = await cartCollection.updateOne(query, updatedData);
+  return { success: Boolean(result.modifiedCount) };
+};
+
 export const decreaseItemDb = async (id, quantity) => {
   const { user } = (await getServerSession(authOptions)) || {};
   if (!user) return { success: false };
@@ -93,21 +112,12 @@ export const decreaseItemDb = async (id, quantity) => {
   const result = await cartCollection.updateOne(query, updatedData);
   return { success: Boolean(result.modifiedCount) };
 };
-export const increaseItemDb = async (id, quantity) => {
+
+export const clearCart = async () => {
   const { user } = (await getServerSession(authOptions)) || {};
   if (!user) return { success: false };
 
-  if (quantity > 10) {
-    return { success: false };
-  }
-
-  const query = { _id: new ObjectId(id) };
-
-  const updatedData = {
-    $inc: {
-      quantity: 1,
-    },
-  };
-  const result = await cartCollection.updateOne(query, updatedData);
-  return { success: Boolean(result.modifiedCount) };
+  const query = { email: user?.email };
+  const result = await cartCollection.deleteMany(query);
+  return result;
 };

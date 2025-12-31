@@ -1,5 +1,5 @@
 import { getCart } from "@/actions/server/cart";
-import CartClient from "@/components/cart/CartClient";
+import CartClient from "@/components/clientComponents/CartClient";
 import React from "react";
 
 const cartPage = async () => {

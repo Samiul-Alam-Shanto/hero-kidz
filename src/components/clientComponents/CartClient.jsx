@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import CartCard from "../cards/CartCard";
+import Link from "next/link";
 
 const CartClient = ({ cartItem }) => {
   const [items, setItems] = useState(cartItem);
@@ -66,9 +67,13 @@ const CartClient = ({ cartItem }) => {
               <span>৳{subtotal}</span>
             </div>
 
-            <button className="w-full mt-6 bg-black text-white py-3 rounded-lg hover:bg-gray-900 transition">
+            <Link
+              href={"/checkout"}
+              className="btn w-full mt-6 bg-black text-white py-3 rounded-lg hover:bg-gray-900 transition"
+              disabled={!items.length}
+            >
               Proceed to Checkout
-            </button>
+            </Link>
           </div>
         </div>
       )}
